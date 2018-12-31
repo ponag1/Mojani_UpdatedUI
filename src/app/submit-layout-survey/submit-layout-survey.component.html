@@ -1,0 +1,75 @@
+<div class="title_banner">
+  <div class="container" style="width:1230px;">
+    <h1>One click away for Land Registry</h1>
+    <h2>Online Land Records</h2>
+  </div>
+</div>
+<div class="container">
+  <div class="titlebar">Submit Survey for Layout <img src="/assets/images/user_icon.png">
+    <div class="dropdown" style="float: right;">
+      <button style="background-color: transparent; border: 0px; text-transform: uppercase; color:#27bed9; font-size: 14px;" type="button" data-toggle="dropdown">MSURVEY <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <app-logout></app-logout>
+      </ul>
+    </div>
+  </div>
+  <div class="mojani_form">
+    <div *ngIf="submitSuccess; then successMsg else approveForm" ></div>
+    <ng-template #approveForm>
+      <h2>Search Criteria</h2> 
+        <div class="form-group block">
+          <div class="col-lg-4">
+            <label for="wardNo" required>Ward # <span class="red">*</span></label>
+            <input type="text" id="wardNo" name="wardNo" class="form-control"  [(ngModel)]="wardNo"  />
+          </div>
+          <div class="col-lg-4">
+            <label for="areaCode" required>Area Code <span class="red">*</span></label>
+            <input type="text" id="areaCode" name="areaCode" class="form-control"  [(ngModel)]="areaCode"  />
+          </div>
+          <div class="col-lg-4">
+            <label>Plot/Site No.</label>
+            <input type="submit" value="Search" (click)= "search()">
+          </div>
+          <div class="clearfix"></div>
+        </div> 
+        <hr />
+      <!--Search results of the land records for approval -->
+      <div *ngIf= "fetchComplete" >
+        <div class="block">
+        <table>
+          <tr>
+            <th>PID</th>
+            <th>Site No</th>
+            <th>Total Area</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Status</th>
+          </tr>
+          <tr *ngFor="let land of landRecords;let i = index">
+              <td><a [routerLink] = "['/layoutApplication']" [queryParams]="{pid:land.pid}">{{land.pid}}</a></td>
+              <td>{{land.siteNo}}</td>
+              <td>{{land.geoData.totalArea}}</td>
+              <td>{{land.geoData.latitude}}</td>
+              <td>{{land.geoData.longitude}}</td>
+              <td>{{getApplicationStatus(land)}}</td>
+          </tr>
+        </table> 
+      <div *ngIf='noSearchResults' style='color:red;' align='center'><strong>No matching results found !</strong></div>
+      </div>
+      </div>
+    </ng-template>
+    <!--Success message for the approval-->
+    <ng-template #successMsg >
+      <div class="alert alert-success"> <strong>Success!</strong>
+      The survey application has been submitted successfully !
+      </div>
+      <div class="alert alert-info">
+        Please click on <strong>OK</strong> to submit a new application !
+      </div>
+      <div align="center"><button type="submit" class="btn btn-primary" (click)="submitNew()">OK</button></div>
+    </ng-template>
+  </div>
+</div>
+
+
+ 
